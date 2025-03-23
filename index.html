@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🕊️ Bird Range Predictor 🕊️</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #e3f2fd, #ffffff);
+      color: #333;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #007acc;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-top: 20px;
+      margin-bottom: 8px;
+    }
+
+    select, input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+
+    select:focus, input:focus {
+      border-color: #007acc;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 25px;
+      background-color: #007acc;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #005b99;
+    }
+
+    .response-box {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #f1f9ff;
+      border-left: 6px solid #007acc;
+      border-radius: 8px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      color: #333;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 60px;
+      font-size: 14px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🕊️ Bird Range Predictor 🕊️</h1>
+
+    <label for="api">Choose what you want to predict:</label>
+    <select id="api" onchange="updateExample()">
+      <option value="http://127.0.0.1:5000/predict_presence">Bird Presence Prediction - 🟢 Can I see a {bird name} in {location} ?</option>
+      <option value="http://127.0.0.1:5001/predict_location">Birdwatching Locations Prediction - 📍 Where can I spot a {bird name} ?</option>
+      <option value="http://127.0.0.1:5002/predict_best_time">Best Time Prediction - 🕒 When to watch a {bird name} ?</option>
+    </select>
+
+    <label for="query">Enter your query:</label>
+    <input type="text" id="query" placeholder="e.g., When can I see a blue bird in Yala?">
+
+    <button onclick="callAPI()">🚀 Send Query</button>
+
+    <div class="response-box" id="output">🔍 Response will appear here...</div>
+  </div>
+
+  <div class="footer">
+    © 2025 Github Deshan Senanayake | For your birdwatching predictions
+  </div>
+
+  <script>
+    function updateExample() {
+      const api = document.getElementById("api").value;
+      const queryBox = document.getElementById("query");
+
+      if (api.includes("predict_presence")) {
+        queryBox.placeholder = "e.g., Will I be able to see a Blue tailed Bee eater in Bundala";
+      } else if (api.includes("predict_location")) {
+        queryBox.placeholder = "e.g., Where can I see a Red vented Bulbul on a Saturday Morning ?";
+      } else if (api.includes("predict_best_time")) {
+        queryBox.placeholder = "e.g., What is the best time to watch a Kingfisher in Yala?";
+      }
+    }
+
+    async function callAPI() {
+      const api = document.getElementById("api").value;
+      const query = document.getElementById("query").value.trim();
+      const output = document.getElementById("output");
+
+      if (!query) {
+        output.textContent = "⚠️ Please enter a query to continue.";
+        return;
+      }
+
+      output.textContent = "⏳ Waiting for response...";
+
+      try {
+        const response = await fetch(api, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query: query })
+        });
+
+        const result = await response.json();
+
+        if (result.Response) {
+          output.textContent = "✅ " + result.Response;
+        } else if (result.message) {
+          output.textContent = "⚠️ " + result.message;
+        } else {
+          output.textContent = "🔍 Full JSON:\n" + JSON.stringify(result, null, 2);
+        }
+      } catch (error) {
+        output.textContent = "❌ Error calling API:\n" + error;
+      }
+    }
+
+    // Initialize with default example
+    updateExample();
+  </script>
+</body>
+</html>
