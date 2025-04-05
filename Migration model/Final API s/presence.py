@@ -25,12 +25,12 @@ import io
 MODEL_URL = "https://raw.githubusercontent.com/Deshan-Senanayake/Bird-Range-Prediction/main/Migration%20model/models/migration_prediction_model.pkl"
 
 try:
-    response = requests.get(MODEL_URL)
-    response.raise_for_status()  
-    model_data = joblib.load(io.BytesIO(response.content))
-    rf_model = model_data['rf_final']
-    label_encoders = model_data['label_encoders']
-    selected_features = model_data['selected_features']
+    response1 = requests.get(MODEL_URL)
+    response1.raise_for_status()  
+    model_data1 = joblib.load(io.BytesIO(response1.content))
+    rf_model = model_data1['rf_final']
+    label_encoders1 = model_data1['label_encoders']
+    selected_features1 = model_data1['selected_features']
     logger.info("✅ Model loaded successfully from GitHub.")
 except Exception as e:
     logger.error(f"❌ Error loading model: {e}")
@@ -39,7 +39,10 @@ except Exception as e:
 # ✅ Valid Localities & Bird Names
 valid_localities = [
     "Buckingham Place Hotel Tangalle", "Bundala NP General", "Bundala National Park",
-    "Kalametiya", "Tissa Lake", "Yala National Park General", "Debarawewa Lake"
+    "Kalametiya", "Tissa Lake", "Yala National Park General", "Debarawewa Lake", 
+    
+   
+    
 ]
 
 valid_bird_names = ["Blue-tailed Bee-eater", "Red-vented Bulbul", "White-throated Kingfisher"]
@@ -275,10 +278,9 @@ def predict():
         # ✅ Check if Locality is Missing
         if features["locality"] == "Unknown Location":
             return jsonify({
-                "message": "The query you entered didn't contain a location. Please select one and re-enter the query.",
-                "valid_localities": valid_localities,
-                "location_aliases": [
-                    "You can also use 'Bundala' instead of 'Bundala NP General'.",
+                "message": "The query you entered didn't contain a location in Hambanthota District. Please select one and re-enter the query.",
+                "you can use these locations": [
+                    "You can use 'Bundala' instead of 'Bundala NP General'.",
                     "You can use 'Yala' instead of 'Yala National Park General'.",
                     "You can use 'Tissa' instead of 'Tissa Lake'."
                 ]
@@ -292,13 +294,13 @@ def predict():
             })
 
         # ✅ Encode Locality & Bird Name
-        locality_encoded = label_encoders['LOCALITY'].transform([features["locality"]])[0]
-        bird_name_encoded = label_encoders['COMMON NAME'].transform([features["bird_name"]])[0]
+        locality_encoded = label_encoders1['LOCALITY'].transform([features["locality"]])[0]
+        bird_name_encoded = label_encoders1['COMMON NAME'].transform([features["bird_name"]])[0]
 
         # ✅ Prepare Input Data
         input_data = pd.DataFrame([[features["year"], features["month"], features["day_of_week"],
                                     features["hour"], locality_encoded, bird_name_encoded]], 
-                                   columns=selected_features)
+                                   columns=selected_features1)
 
         # ✅ Make Prediction
         probability = rf_model.predict_proba(input_data)[:, 1][0]
@@ -324,3 +326,4 @@ def predict():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
+

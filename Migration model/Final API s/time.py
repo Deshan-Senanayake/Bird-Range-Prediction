@@ -23,7 +23,12 @@ def load_model():
     response.raise_for_status()
     return joblib.load(io.BytesIO(response.content))
 
+
+
 model_data = load_model()
+
+print("📦 Keys in model_data3:", model_data.keys())
+
 month_model = model_data['month_model']
 hour_model = model_data['hour_model']
 selected_features = model_data['selected_features']
@@ -247,6 +252,8 @@ def predict_best_time():
             logger.error(f"Encoding Error: {e}")
             return jsonify({"error": f"Invalid input detected: {str(e)}"}), 400  # ✅ Return proper error message
 
+
+        print("📦 Keys in model_data3:", model_data.keys())
 
 
         input_data = pd.DataFrame([[1, features["year"], features["day_of_week"],

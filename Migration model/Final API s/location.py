@@ -281,7 +281,7 @@ def predict_best_locations():
         for location in predefined_locations:
             
             input_data = pd.DataFrame([[features["year"], features["month"], features["day_of_week"],
-                                        features["hour"], location["LATITUDE"], 1, location["LONGITUDE"],
+                                        features["hour"], location["LATITUDE"], location["LONGITUDE"],
                                         bird_name_encoded]],
                                     columns=selected_features)
             
@@ -306,4 +306,4 @@ def predict_best_locations():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
