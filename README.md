@@ -1,9 +1,47 @@
-# Bird Range Prediction
- Predcits bird presence, location and times. This has 3 API s to do predictions. 3 models have trained do the predictions for API s. Models were limited to only 3 birds and only avialable limited data recorded in one district in Sri Lanka, South Asia.
+# 🐦 Bird Range Prediction Web App
 
-Instructuions :
+This is a lightweight web application that allows users to predict **bird presence**, **location**, and the **best time to observe birds** based on machine learning models trained on real birdwatching data from the Hambantota District.
 
-Download the API files and the web page.
-Replcae the URL or ports in API files. Or you can host API if you want
-Update the index.html
-Do your predictions.
+The app serves as a frontend to three Flask APIs powered by trained Random Forest models, helping users answer:
+
+- **Will I see this bird?**
+- **Where can I see it?**
+- **When is the best time to go birdwatching?**
+
+## 🚀 Features
+
+- 🔍 **Bird Presence Prediction**  
+  Predicts if a bird is likely to be present at a specific location, time, and date.
+
+- 📍 **Birdwatching Location Prediction**  
+  Suggests the most likely locations to see a given bird based on time and season.
+
+- 🕒 **Best Time Prediction**  
+  Recommends the ideal month and hour to observe a specific bird at a location.
+
+- 🌐 **Simple HTML Interface**  
+  Enter query details and get natural-language predictions directly in your browser.
+
+## ✅ Example Usage
+Input:
+
+Bird: Blue-tailed Bee-eater
+
+Location: Bundala NP General
+
+Date: 2025-04-04
+
+Time: Morning
+
+Prediction Type: Presence
+
+Output:
+
+"The Blue-tailed Bee-eater is likely to be present at Bundala NP General on Friday, 4/2025 in the morning."
+
+## 📚 Acknowledgments
+Dataset collected from eBird.org
+
+Developed as part of the FeatherFind project for the BSc (Hons) in Artificial Intelligence and Data Science degree.
+
+Supervised by faculty at Informatics Institute of Technology in collaboration with Robert Gordon University.
